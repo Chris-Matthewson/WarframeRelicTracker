@@ -5,6 +5,7 @@
         Lith,
         Meso,
         Neo,
-        Axi
+        Axi,
+        All
     }
 }

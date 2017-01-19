@@ -14,65 +14,47 @@
         <TabControl x:Name="MainTabControl">
             <TabItem Header="By Relic">
                 <Grid Background="#FFE5E5E5">
-                    <TabControl x:Name="RelicTabControl">
-                        <TabItem Header="Lith">
-                            <Grid Background="#FFE5E5E5">
-                                <ScrollViewer x:Name="LithScrollViewer">
-                                    <ItemsControl x:Name="LithItemsControl" ItemsSource="{Binding LithRelics}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <warframeTracker:RelicView HorizontalAlignment="Left" Margin="15"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Search">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Orientation="Horizontal" Margin="0">
+                                <CheckBox x:Name="LithFilter" IsChecked="{Binding LithFilter}" Content="Lith" Margin="0,0,10,0" />
+                                <CheckBox x:Name="MesoFilter" IsChecked="{Binding MesoFilter}" Content="Meso" Margin="10,0" />
+                                <CheckBox x:Name="NeoFilter" IsChecked="{Binding NeoFilter}" Content="Neo" Margin="10,0" />
+                                <CheckBox x:Name="AxiFilter" IsChecked="{Binding AxiFilter}" Content="Axi" Margin="10,0" />
+                            </StackPanel>
+                            <TextBox Margin="0" Grid.Row="1" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Results" Grid.Row="1">
+                        <Grid>
+                            <ScrollViewer>
+                            <ItemsControl ItemsSource="{Binding FilteredRelics}" VerticalAlignment="Top">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="2" VerticalAlignment="Top" Height="Auto"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <warframeTracker:RelicView DataContext="{Binding}" Margin="15"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
                                 </ScrollViewer>
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Meso">
-                            <Grid Background="#FFE5E5E5">
-                                <ScrollViewer x:Name="MesoScrollViewer">
-                                    <ItemsControl x:Name="MesoItemsControl" ItemsSource="{Binding MesoRelics}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <warframeTracker:RelicView HorizontalAlignment="Left" Margin="15"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>     
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Neo">
-                            <Grid Background="#FFE5E5E5">
-                                <ScrollViewer x:Name="NeoScrollViewer">
-                                    <ItemsControl x:Name="NeoItemsControl" ItemsSource="{Binding NeoRelics}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <warframeTracker:RelicView HorizontalAlignment="Left" Margin="15"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>     
-                            </Grid>
-                        </TabItem>
-                        <TabItem Header="Axi">
-                            <Grid Background="#FFE5E5E5">
-                                <ScrollViewer x:Name="AxiScrollViewer">
-                                    <ItemsControl x:Name="AxiItemsControl" ItemsSource="{Binding AxiRelics}">
-                                        <ItemsControl.ItemsPanel>
-                                            <ItemsPanelTemplate>
-                                                <UniformGrid Columns="2"/>
-                                            </ItemsPanelTemplate>
-                                        </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <warframeTracker:RelicView HorizontalAlignment="Stretch" Margin="15"/>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>     
-                            </Grid>
-                        </TabItem>
-                    </TabControl>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="By Item">
