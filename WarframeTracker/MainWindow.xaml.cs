@@ -10,7 +10,7 @@ namespace WarframeTracker
         {
             string filePath;
             string _relicDirectory = @"C:\ProgramData\WarframeRelicTracker\default";
-
+            
             if (!Directory.Exists(_relicDirectory))
             {
                 Directory.CreateDirectory(_relicDirectory);

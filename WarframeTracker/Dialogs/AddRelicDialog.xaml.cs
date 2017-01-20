@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using WarframeTracker.Model;
 using WarframeTracker.ViewModel;
 
@@ -35,7 +34,7 @@ namespace WarframeTracker.Dialogs
 
             foreach (var component in ((AddRelicDialogViewModel)DataContext).Components.ToArray())
             {
-                relic.Components.Add(new ItemComponent
+                relic.Components.Add(new ComponentModel
                 {
                     Item = component.Item,
                     Name = component.Name,

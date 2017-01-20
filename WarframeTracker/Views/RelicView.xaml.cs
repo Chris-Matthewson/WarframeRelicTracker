@@ -3,7 +3,7 @@ using GalaSoft.MvvmLight.Ioc;
 using WarframeTracker.Model;
 using WarframeTracker.ViewModel;
 
-namespace WarframeTracker
+namespace WarframeTracker.Views
 {
     public partial class RelicView
     {
@@ -14,12 +14,12 @@ namespace WarframeTracker
 
         private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
         {
-            SimpleIoc.Default.GetInstance<MainViewModel>().Save(((FrameworkElement)sender).DataContext as ItemComponent);
+            SimpleIoc.Default.GetInstance<MainViewModel>().Save(((FrameworkElement)sender).DataContext as ComponentModel);
         }
 
         private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
         {
-            SimpleIoc.Default.GetInstance<MainViewModel>().Save(((FrameworkElement)sender).DataContext as ItemComponent);
+            SimpleIoc.Default.GetInstance<MainViewModel>().Save(((FrameworkElement)sender).DataContext as ComponentModel);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -14,10 +15,11 @@ namespace WarframeTracker.ViewModel
     public class MainViewModel : ViewModelBase
     {
         private readonly IRelicService _relicDataService;
-        private readonly List<RelicModel> _lithRelics = new List<RelicModel>();
-        private readonly List<RelicModel> _mesoRelics = new List<RelicModel>();
-        private readonly List<RelicModel> _neoRelics = new List<RelicModel>();
-        private readonly List<RelicModel> _axiRelics = new List<RelicModel>();
+        private readonly List<RelicModel> _lithRelics;
+        private readonly List<RelicModel> _mesoRelics;
+        private readonly List<RelicModel> _neoRelics;
+        private readonly List<RelicModel> _axiRelics;
+        private readonly List<ItemModel> _items;
 
         private string _searchString = "";
 
@@ -53,7 +55,7 @@ namespace WarframeTracker.ViewModel
             }
         }
 
-        private bool _mesoFilter;
+        private bool _mesoFilter = true;
 
         public bool MesoFilter
         {
@@ -70,7 +72,7 @@ namespace WarframeTracker.ViewModel
             }
         }
 
-        private bool _neoFilter;
+        private bool _neoFilter = true;
 
         public bool NeoFilter
         {
@@ -87,7 +89,7 @@ namespace WarframeTracker.ViewModel
             }
         }
 
-        private bool _axiFilter;
+        private bool _axiFilter = true;
 
         public bool AxiFilter
         {
@@ -100,6 +102,22 @@ namespace WarframeTracker.ViewModel
                 }
                 _axiFilter = value;
                 FilterRelics();
+                RaisePropertyChanged();
+            }
+        }
+
+        private ObservableCollection<ItemModel> _filteredItemModels = new ObservableCollection<ItemModel>();
+
+        public ObservableCollection<ItemModel> FilteredItemModels
+        {
+            get { return _filteredItemModels; }
+            set
+            {
+                if (Equals(_filteredItemModels, value))
+                {
+                    return;
+                }
+                _filteredItemModels = value;
                 RaisePropertyChanged();
             }
         }
@@ -129,6 +147,10 @@ namespace WarframeTracker.ViewModel
             _axiRelics = _relicDataService.GetRelics(RelicType.Axi, "default");
 
             FilterRelics();
+
+            _items = ExtrapolateItems();
+
+            FilteredItemModels = new ObservableCollection<ItemModel>(_items);
         }
         
         private RelayCommand _addRelicCommand;
@@ -162,7 +184,7 @@ namespace WarframeTracker.ViewModel
             Save(null);
         }
 
-        public void Save(ItemComponent item)
+        public void Save(ComponentModel item)
         {
             if (item != null)
             {
@@ -237,6 +259,47 @@ namespace WarframeTracker.ViewModel
             }
 
             return results;
+        }
+
+        private List<ItemModel> ExtrapolateItems()
+        {
+            var allRelics = _lithRelics.Concat(_mesoRelics)
+                                       .Concat(_neoRelics)
+                                       .Concat(_axiRelics);
+            var items = new List<ItemModel>();
+
+
+            foreach (var relicModel in allRelics)
+            {
+                foreach (var component in relicModel.Components)
+                {
+                    //component.Relic = relicModel.RelicType + "-" + relicModel.RelicSuffix;
+
+                    if (component.Item == "Forma")
+                    {
+                        continue;
+                    }
+
+                    if (items.All(x => x.Name != component.Item))
+                    {
+                        items.Add(new ItemModel
+                        {
+                            Name = component.Item,
+                            Components = {component}
+                        });
+                    }
+                    else
+                    {
+                        foreach (var item in items.Where(x => x.Name == component.Item))
+                        {
+                            item.Components.Add(component);
+                        }
+                        
+                    }
+                }
+            }
+            
+            return items;
         }
     }
 }

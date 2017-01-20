@@ -41,17 +41,17 @@ namespace WarframeTracker.ViewModel
             }
         }
 
-        private ObservableCollection<ItemComponent> _components = new ObservableCollection<ItemComponent>
+        private ObservableCollection<ComponentModel> _components = new ObservableCollection<ComponentModel>
         {
-            new ItemComponent { Owned = false},
-            new ItemComponent { Owned = false},
-            new ItemComponent { Owned = false},
-            new ItemComponent { Owned = false},
-            new ItemComponent { Owned = false},
-            new ItemComponent { Owned = false}
+            new ComponentModel { Owned = false},
+            new ComponentModel { Owned = false},
+            new ComponentModel { Owned = false},
+            new ComponentModel { Owned = false},
+            new ComponentModel { Owned = false},
+            new ComponentModel { Owned = false}
         };
 
-        public ObservableCollection<ItemComponent> Components
+        public ObservableCollection<ComponentModel> Components
         {
             get
             {
@@ -72,15 +72,15 @@ namespace WarframeTracker.ViewModel
         public ICommand AddComponentCommand =>  _addComponentCommand ?? ( _addComponentCommand = new RelayCommand(AddComponent));
         protected void AddComponent()
         {
-            Components.Add(new ItemComponent {Owned = false});
+            Components.Add(new ComponentModel {Owned = false});
         }
 
         #region RemoveComponentCommand
-        private RelayCommand<ItemComponent> _removeComponentCommand;
-        public ICommand RemoveComponentCommand => _removeComponentCommand ?? (_removeComponentCommand = new RelayCommand<ItemComponent>(RemoveComponent));
-        protected void RemoveComponent(ItemComponent component)
+        private RelayCommand<ComponentModel> _removeComponentCommand;
+        public ICommand RemoveComponentCommand => _removeComponentCommand ?? (_removeComponentCommand = new RelayCommand<ComponentModel>(RemoveComponent));
+        protected void RemoveComponent(ComponentModel componentModel)
         {
-            Components.Remove(component);
+            Components.Remove(componentModel);
         }
         #endregion
     }

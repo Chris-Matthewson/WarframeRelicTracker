@@ -15,30 +15,30 @@ namespace WarframeTracker.Design
                 {
                     RelicType = RelicType.Lith,
                     RelicSuffix = RelicSuffix.A1,
-                    Components = new List<ItemComponent>
+                    Components = new List<ComponentModel>
                     {
-                        new ItemComponent { Item = "Paris Prime", Name = "String", Owned = false},
-                        new ItemComponent { Item = "Forma", Name = "Blueprint", Owned = true},
+                        new ComponentModel { Item = "Paris Prime", Name = "String", Owned = false},
+                        new ComponentModel { Item = "Forma", Name = "Blueprint", Owned = true},
                     }
                 },
                 new RelicModel
                 {
                     RelicType = RelicType.Lith,
                     RelicSuffix = RelicSuffix.A1,
-                    Components = new List<ItemComponent>
+                    Components = new List<ComponentModel>
                     {
-                        new ItemComponent { Item = "Paris Prime", Name = "String", Owned = false},
-                        new ItemComponent { Item = "Forma", Name = "Blueprint", Owned = true},
+                        new ComponentModel { Item = "Paris Prime", Name = "String", Owned = false},
+                        new ComponentModel { Item = "Forma", Name = "Blueprint", Owned = true},
                     }
                 },
                 new RelicModel
                 {
                     RelicType = RelicType.Lith,
                     RelicSuffix = RelicSuffix.A1,
-                    Components = new List<ItemComponent>
+                    Components = new List<ComponentModel>
                     {
-                        new ItemComponent { Item = "Paris Prime", Name = "String", Owned = false},
-                        new ItemComponent { Item = "Forma", Name = "Blueprint", Owned = true},
+                        new ComponentModel { Item = "Paris Prime", Name = "String", Owned = false},
+                        new ComponentModel { Item = "Forma", Name = "Blueprint", Owned = true},
                     }
                 }
             };

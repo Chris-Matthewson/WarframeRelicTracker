@@ -4,9 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
-    xmlns:local="clr-namespace:WarframeTracker.Dialogs"
-    xmlns:enum="clr-namespace:WarframeTracker.Enums"
-    x:Class="WarframeTracker.Dialogs.AddRelicDialog"
+        xmlns:enum="clr-namespace:WarframeTracker.Enums"
+        x:Class="WarframeTracker.Dialogs.AddRelicDialog"
         mc:Ignorable="d"
         Title="AddRelicDialog" Height="300" Width="300"
         >

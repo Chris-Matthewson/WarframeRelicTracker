@@ -1,32 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace WarframeTracker.Model
 {
     public class ItemModel
     {
-        public List<ItemComponent> Components { get; set; }
-
-        private bool _owned;
-
-        public bool Owned
+        public string Name { get; set; }
+        public List<ComponentModel> Components { get; set; } = new List<ComponentModel>();
+        public bool Owned => Components.All(component => component.Owned);
+        
+        public override string ToString()
         {
-            get
-            {
-                CheckIfOwned();
-                return _owned;
-            }
-        }
-
-        private void CheckIfOwned()
-        {
-            if (Components.Any(component => !component.Owned))
-            {
-                _owned = false;
-                return;
-            }
-
-            _owned = true;
+            return Name + (Owned ? "Owned" : "Not Owned") +
+                   "(" + string.Join(Environment.NewLine, Components.Select(x => x.ComponentName)) + ")";
         }
     }
 }
