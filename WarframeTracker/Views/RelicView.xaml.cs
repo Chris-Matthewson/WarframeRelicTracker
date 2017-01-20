@@ -12,14 +12,11 @@ namespace WarframeTracker.Views
             InitializeComponent();
         }
 
-        private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
         {
-            SimpleIoc.Default.GetInstance<MainViewModel>().Save(((FrameworkElement)sender).DataContext as ComponentModel);
-        }
-
-        private void ToggleButton_OnUnchecked(object sender, RoutedEventArgs e)
-        {
-            SimpleIoc.Default.GetInstance<MainViewModel>().Save(((FrameworkElement)sender).DataContext as ComponentModel);
+            var s = (FrameworkElement)sender;
+            var dc = (ComponentModel)s.DataContext;
+            SimpleIoc.Default.GetInstance<MainViewModel>().NewComponentObtained(dc);
         }
     }
 }

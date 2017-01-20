@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ignore="http://www.galasoft.ch/ignore"
         mc:Ignorable="d ignore"
-        d:DataContext="{Binding Main.FilteredRelics[0], Source={StaticResource Locator}}">
+        d:DataContext="{Binding Main.RelicCollectionView.CurrentItem, Source={StaticResource Locator}}">
     <Grid Width="Auto" Height="Auto">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -25,12 +25,12 @@
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding Item}" FontWeight="Bold"/>
+                            <TextBlock Text="{Binding ItemName}" FontWeight="Bold"/>
                             <TextBlock Text=" - " />
-                            <TextBlock Text="{Binding Name}"/>
+                            <TextBlock Text="{Binding ComponentName}"/>
                         </StackPanel>
                         <Viewbox Width="20" Height="20" Grid.Column="1">
-                            <CheckBox IsChecked="{Binding Owned}" Checked="ToggleButton_OnChecked" Unchecked="ToggleButton_OnUnchecked"/>
+                            <CheckBox IsChecked="{Binding Owned}" Click="CheckBox_Click"/>
                         </Viewbox>
                     </Grid>
                 </DataTemplate>

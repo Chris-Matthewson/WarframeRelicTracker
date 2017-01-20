@@ -41,7 +41,7 @@
                     <GroupBox Header="Results" Grid.Row="1">
                         <Grid>
                             <ScrollViewer>
-                            <ItemsControl ItemsSource="{Binding FilteredRelics}" VerticalAlignment="Top">
+                            <ItemsControl ItemsSource="{Binding RelicCollectionView}" VerticalAlignment="Top">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <UniformGrid Columns="2" VerticalAlignment="Top" Height="Auto"/>
@@ -62,7 +62,7 @@
                 <Grid Background="#FFE5E5E5">
                     <GroupBox x:Name="ItemsGroupBox" Header="Results">
                         <ScrollViewer>
-                            <ItemsControl ItemsSource="{Binding FilteredItemModels}" VerticalAlignment="Top">
+                            <ItemsControl ItemsSource="{Binding ItemsCollectionView}" VerticalAlignment="Top">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <UniformGrid Columns="2" VerticalAlignment="Top" Height="Auto"/>

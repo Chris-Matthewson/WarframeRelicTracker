@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
+using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
@@ -14,14 +16,67 @@ namespace WarframeTracker.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly IRelicService _relicDataService;
-        private readonly List<RelicModel> _lithRelics;
-        private readonly List<RelicModel> _mesoRelics;
-        private readonly List<RelicModel> _neoRelics;
-        private readonly List<RelicModel> _axiRelics;
         private readonly List<ItemModel> _items;
+        private readonly IRelicService _relicDataService;
+        private readonly List<RelicModel> _relics;
+        private RelayCommand _addRelicCommand;
+        private bool _axiFilter = true;
 
+        private ICollectionView _itemsCollectionView;
+        private bool _lithFilter = true;
+        private bool _mesoFilter = true;
+        private bool _neoFilter = true;
+        private ICollectionView _relicCollectionView;
         private string _searchString = "";
+
+        public MainViewModel(IRelicService relicDataService)
+        {
+            PropertyChanged += OnPropertyChanged;
+
+            _relicDataService = relicDataService;
+
+            _relics = _relicDataService.GetRelics(RelicType.Lith, "default")
+                .Concat(_relicDataService.GetRelics(RelicType.Meso, "default"))
+                .Concat(_relicDataService.GetRelics(RelicType.Neo, "default"))
+                .Concat(_relicDataService.GetRelics(RelicType.Axi, "default")).ToList();
+            _items = ExtrapolateItems();
+
+            _relicCollectionView = CollectionViewSource.GetDefaultView(_relics);
+            _relicCollectionView.Filter = RelicFilter;
+
+            _itemsCollectionView = CollectionViewSource.GetDefaultView(_items);
+            _itemsCollectionView.Filter = ItemsFilter;
+        }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs propertyChangedEventArgs)
+        {
+            if (propertyChangedEventArgs.PropertyName == null ||
+                propertyChangedEventArgs.PropertyName == "LithFilter" ||
+                propertyChangedEventArgs.PropertyName == "MesoFilter" ||
+                propertyChangedEventArgs.PropertyName == "NeoFilter" ||
+                propertyChangedEventArgs.PropertyName == "AxiFilter")
+            {
+                _relicCollectionView.Refresh();
+            }
+
+            if (propertyChangedEventArgs.PropertyName == null ||
+                propertyChangedEventArgs.PropertyName == "SearchString")
+            {
+                _itemsCollectionView.Refresh();
+            }
+        }
+
+        public ICollectionView ItemsCollectionView
+        {
+            get { return _itemsCollectionView; }
+            set
+            {
+                if (Equals(_itemsCollectionView, value))
+                    return;
+                _itemsCollectionView = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public string SearchString
         {
@@ -29,16 +84,11 @@ namespace WarframeTracker.ViewModel
             set
             {
                 if (_searchString.Equals(value))
-                {
                     return;
-                }
                 _searchString = value;
-                FilterRelics();
                 RaisePropertyChanged();
             }
         }
-
-        private bool _lithFilter = true;
 
         public bool LithFilter
         {
@@ -46,16 +96,11 @@ namespace WarframeTracker.ViewModel
             set
             {
                 if (_lithFilter.Equals(value))
-                {
                     return;
-                }
                 _lithFilter = value;
-                FilterRelics();
                 RaisePropertyChanged();
             }
         }
-
-        private bool _mesoFilter = true;
 
         public bool MesoFilter
         {
@@ -63,16 +108,11 @@ namespace WarframeTracker.ViewModel
             set
             {
                 if (_mesoFilter.Equals(value))
-                {
                     return;
-                }
                 _mesoFilter = value;
-                FilterRelics();
                 RaisePropertyChanged();
             }
         }
-
-        private bool _neoFilter = true;
 
         public bool NeoFilter
         {
@@ -80,16 +120,11 @@ namespace WarframeTracker.ViewModel
             set
             {
                 if (_neoFilter.Equals(value))
-                {
                     return;
-                }
                 _neoFilter = value;
-                FilterRelics();
                 RaisePropertyChanged();
             }
         }
-
-        private bool _axiFilter = true;
 
         public bool AxiFilter
         {
@@ -97,200 +132,117 @@ namespace WarframeTracker.ViewModel
             set
             {
                 if (_axiFilter.Equals(value))
-                {
                     return;
-                }
                 _axiFilter = value;
-                FilterRelics();
                 RaisePropertyChanged();
             }
         }
 
-        private ObservableCollection<ItemModel> _filteredItemModels = new ObservableCollection<ItemModel>();
-
-        public ObservableCollection<ItemModel> FilteredItemModels
+        public ICollectionView RelicCollectionView
         {
-            get { return _filteredItemModels; }
+            get { return _relicCollectionView; }
             set
             {
-                if (Equals(_filteredItemModels, value))
-                {
+                if (Equals(_relicCollectionView, value))
                     return;
-                }
-                _filteredItemModels = value;
+                _relicCollectionView = value;
                 RaisePropertyChanged();
             }
-        }
-
-        private ObservableCollection<RelicModel> _filteredRelics = new ObservableCollection<RelicModel>();
-
-        public ObservableCollection<RelicModel> FilteredRelics
-        {
-            get { return _filteredRelics; }
-            set
-            {
-                if (_filteredRelics.Equals(value))
-                {
-                    return;
-                }
-                _filteredRelics = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public MainViewModel(IRelicService relicDataService)
-        {
-            _relicDataService = relicDataService;
-            _lithRelics = _relicDataService.GetRelics(RelicType.Lith, "default");
-            _mesoRelics = _relicDataService.GetRelics(RelicType.Meso, "default");
-            _neoRelics = _relicDataService.GetRelics(RelicType.Neo, "default");
-            _axiRelics = _relicDataService.GetRelics(RelicType.Axi, "default");
-
-            FilterRelics();
-
-            _items = ExtrapolateItems();
-
-            FilteredItemModels = new ObservableCollection<ItemModel>(_items);
         }
         
-        private RelayCommand _addRelicCommand;
-        public ICommand AddRelicCommand =>  _addRelicCommand ?? ( _addRelicCommand = new RelayCommand(AddRelic));
+
+        public ICommand AddRelicCommand => _addRelicCommand ?? (_addRelicCommand = new RelayCommand(AddRelic));
+
+        private bool ItemsFilter(object o)
+        {
+            var item = o as ItemModel;
+
+            if (item == null)
+                return false;
+
+            return true;
+        }
+
         protected void AddRelic()
         {
             var relicDialog = new AddRelicDialog();
 
             if (relicDialog.ShowDialog() != true)
-            {
                 return;
-            }
 
-            switch (relicDialog.Relic.RelicType)
-            {
-                case RelicType.Lith:
-                    _lithRelics.Add(relicDialog.Relic);
-                    break;
-                case RelicType.Meso:
-                    _mesoRelics.Add(relicDialog.Relic);
-                    break;
-                case RelicType.Neo:
-                    _neoRelics.Add(relicDialog.Relic);
-                    break;
-                case RelicType.Axi:
-                    _axiRelics.Add(relicDialog.Relic);
-                    break;
-            }
+            _relics.Add(relicDialog.Relic);
 
-            FilterRelics();
-            Save(null);
+            RelicCollectionView.Refresh();
+
+            Save();
         }
 
-        public void Save(ComponentModel item)
+        public void NewComponentObtained(ComponentModel newComponent)
         {
-            if (item != null)
+            foreach (var relic in _relics)
             {
-                foreach (var relic in new List<RelicModel>().Concat(_lithRelics)
-                    .Concat(_mesoRelics)
-                    .Concat(_neoRelics)
-                    .Concat(_axiRelics).ToList())
+                foreach (var component in relic.Components)
                 {
-                    foreach (var relicComponent in relic.Components)
+                    if (component.ItemName == newComponent.ItemName &&
+                        component.ComponentName == newComponent.ComponentName)
                     {
-                        if (relicComponent.Name == item.Name &&
-                            relicComponent.Item == item.Item)
-                        {
-                            relicComponent.Owned = item.Owned;
-                        }
-                    }
-                }
-
-                FilterRelics();
-            }
-
-            _relicDataService.Save(_lithRelics, _mesoRelics, _neoRelics, _axiRelics, "default");
-        }
-
-        private void FilterRelics()
-        {
-            var filteredList = new List<RelicModel>();
-
-            if (_lithFilter)
-            {
-                filteredList.AddRange(SearchRelics(_lithRelics, SearchString));
-            }
-
-            if (_mesoFilter)
-            {
-                filteredList.AddRange(SearchRelics(_mesoRelics, SearchString));
-            }
-
-            if (_neoFilter)
-            {
-                filteredList.AddRange(SearchRelics(_neoRelics, SearchString));
-            }
-
-            if (_axiFilter)
-            {
-                filteredList.AddRange(SearchRelics(_axiRelics, SearchString));
-            }
-
-            FilteredRelics = new ObservableCollection<RelicModel>(filteredList);
-        }
-
-        private List<RelicModel> SearchRelics(List<RelicModel> relics, string searchString)
-        {
-            var results = new List<RelicModel>();
-
-            foreach (var relicModel in relics)
-            {
-                if (string.IsNullOrWhiteSpace(searchString) ||
-                    relicModel.RelicSuffix.ToString().ToLower().Contains(searchString.ToLower()) ||
-                    relicModel.RelicType.ToString().ToLower().Contains(searchString.ToLower()))
-                {
-                    results.Add(relicModel);
-                }
-                else
-                {
-                    if (relicModel.Components.Any(relicModelComponent => relicModelComponent.Item.ToLower().Contains(searchString.ToLower()) ||
-                                                                         relicModelComponent.Name.ToLower().Contains(searchString.ToLower())))
-                    {
-                        results.Add(relicModel);
+                        component.Owned = newComponent.Owned;
                     }
                 }
             }
+            
+            Save();
+            //RelicCollectionView.Refresh();
+            //ItemsCollectionView.Refresh();
+        }
 
-            return results;
+        public void Save()
+        {
+            _relicDataService.Save(_relics.Where(x => x.RelicType == RelicType.Lith).ToList(),
+                                   _relics.Where(x => x.RelicType == RelicType.Meso).ToList(),
+                                   _relics.Where(x => x.RelicType == RelicType.Neo).ToList(),
+                                   _relics.Where(x => x.RelicType == RelicType.Axi).ToList(),
+                                   "default");
+        }
+
+        private bool RelicFilter(object o)
+        {
+            var relic = o as RelicModel;
+
+            if (relic == null)
+                return false;
+
+            return (((relic.RelicType == RelicType.Lith) && LithFilter) ||
+                    ((relic.RelicType == RelicType.Meso) && MesoFilter) ||
+                    ((relic.RelicType == RelicType.Neo) && NeoFilter) ||
+                    ((relic.RelicType == RelicType.Axi) && AxiFilter)) &&
+                   relic.Search(SearchString);
         }
 
         private List<ItemModel> ExtrapolateItems()
         {
-            var allRelics = _lithRelics.Concat(_mesoRelics)
-                                       .Concat(_neoRelics)
-                                       .Concat(_axiRelics);
             var items = new List<ItemModel>();
 
-
-            foreach (var relicModel in allRelics)
+            foreach (var relicModel in _relics)
             {
                 foreach (var component in relicModel.Components)
                 {
-                    //component.Relic = relicModel.RelicType + "-" + relicModel.RelicSuffix;
-
-                    if (component.Item == "Forma")
+                    if (component.ItemName == "Forma")
                     {
                         continue;
                     }
 
-                    if (items.All(x => x.Name != component.Item))
+                    if (items.All(x => x.ItemName != component.ItemName))
                     {
                         items.Add(new ItemModel
                         {
-                            Name = component.Item,
+                            ItemName = component.ItemName,
                             Components = {component}
                         });
                     }
                     else
                     {
-                        foreach (var item in items.Where(x => x.Name == component.Item))
+                        foreach (var item in items.Where(x => x.ItemName == component.ItemName))
                         {
                             item.Components.Add(component);
                         }

@@ -84,8 +84,8 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBox Text="{Binding Path=Item, UpdateSourceTrigger=PropertyChanged}" Loaded="FrameworkElement_OnLoaded"/>
-                                <TextBox Text="{Binding Path=Name, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
+                                <TextBox Text="{Binding Path=ItemName, UpdateSourceTrigger=PropertyChanged}" Loaded="FrameworkElement_OnLoaded"/>
+                                <TextBox Text="{Binding Path=ComponentName, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"/>
                                 <Border Grid.Column="2" BorderBrush="Transparent" Background="Transparent" Width="20" Height="20">
                                     <Grid>
                                         <Button VerticalAlignment="Stretch" Opacity="0" 

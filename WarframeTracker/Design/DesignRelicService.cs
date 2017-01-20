@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using WarframeTracker.DataService;
 using WarframeTracker.Enums;
 using WarframeTracker.Model;
@@ -15,30 +16,30 @@ namespace WarframeTracker.Design
                 {
                     RelicType = RelicType.Lith,
                     RelicSuffix = RelicSuffix.A1,
-                    Components = new List<ComponentModel>
+                    Components = new ObservableCollection<ComponentModel>
                     {
-                        new ComponentModel { Item = "Paris Prime", Name = "String", Owned = false},
-                        new ComponentModel { Item = "Forma", Name = "Blueprint", Owned = true},
+                        new ComponentModel { ItemName = "Paris Prime", ComponentName = "String", Owned = false},
+                        new ComponentModel { ItemName = "Forma", ComponentName = "Blueprint", Owned = true},
                     }
                 },
                 new RelicModel
                 {
                     RelicType = RelicType.Lith,
                     RelicSuffix = RelicSuffix.A1,
-                    Components = new List<ComponentModel>
+                    Components = new ObservableCollection<ComponentModel>
                     {
-                        new ComponentModel { Item = "Paris Prime", Name = "String", Owned = false},
-                        new ComponentModel { Item = "Forma", Name = "Blueprint", Owned = true},
+                        new ComponentModel { ItemName = "Paris Prime", ComponentName = "String", Owned = false},
+                        new ComponentModel { ItemName = "Forma", ComponentName = "Blueprint", Owned = true},
                     }
                 },
                 new RelicModel
                 {
                     RelicType = RelicType.Lith,
                     RelicSuffix = RelicSuffix.A1,
-                    Components = new List<ComponentModel>
+                    Components = new ObservableCollection<ComponentModel>
                     {
-                        new ComponentModel { Item = "Paris Prime", Name = "String", Owned = false},
-                        new ComponentModel { Item = "Forma", Name = "Blueprint", Owned = true},
+                        new ComponentModel { ItemName = "Paris Prime", ComponentName = "String", Owned = false},
+                        new ComponentModel { ItemName = "Forma", ComponentName = "Blueprint", Owned = true},
                     }
                 }
             };

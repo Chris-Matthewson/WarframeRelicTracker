@@ -93,8 +93,7 @@
     <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\ItemModel.cs" />
     <Compile Include="Model\RelicModel.cs" />
-    <Compile Include="ViewModel\ComponentViewModel.cs" />
-    <Compile Include="ViewModel\RelicViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Views\ItemView.xaml.cs">
       <DependentUpon>ItemView.xaml</DependentUpon>
     </Compile>

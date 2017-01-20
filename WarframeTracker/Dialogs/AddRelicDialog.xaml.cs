@@ -36,8 +36,8 @@ namespace WarframeTracker.Dialogs
             {
                 relic.Components.Add(new ComponentModel
                 {
-                    Item = component.Item,
-                    Name = component.Name,
+                    ItemName = component.ItemName,
+                    ComponentName = component.ComponentName,
                     Owned = false
                 });
             }

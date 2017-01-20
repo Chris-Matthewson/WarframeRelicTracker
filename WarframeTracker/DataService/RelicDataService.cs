@@ -29,19 +29,19 @@ namespace WarframeTracker.DataService
 
             filePath = _relicDirectory + profileName + @"\Lith.json";
             Debug.WriteLine("Saving: " + filePath);
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(lith, Formatting.Indented));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(lith, Formatting.Indented, new JsonSerializerSettings {PreserveReferencesHandling = PreserveReferencesHandling.All}));
 
             filePath = _relicDirectory + profileName + @"\Meso.json";
             Debug.WriteLine("Saving: " + filePath);
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(meso, Formatting.Indented));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(meso, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All }));
 
             filePath = _relicDirectory + profileName + @"\Neo.json";
             Debug.WriteLine("Saving: " + filePath);
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(neo, Formatting.Indented));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(neo, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All }));
 
             filePath = _relicDirectory + profileName + @"\Axi.json";
             Debug.WriteLine("Saving: " + filePath);
-            File.WriteAllText(filePath, JsonConvert.SerializeObject(axi, Formatting.Indented));
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(axi, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All }));
         }
     }
 }
