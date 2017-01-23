@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Windows;
 using WarframeTracker.ViewModel;
 
 namespace WarframeTracker
@@ -11,49 +12,52 @@ namespace WarframeTracker
         {
             string filePath;
             string _relicDirectory = @"C:\ProgramData\WarframeRelicTracker";
-
-
             
-
             if (Directory.Exists(Environment.CurrentDirectory + @"\Relics\"))
             {
-                if (Directory.Exists(_relicDirectory))
+
+                MessageBox.Show("Updated relics detected. Would you like to import?" + Environment.NewLine +
+                                "NOTE: THIS WILL ERASE ALL CURRENT DATA!!!", "Update Relics", MessageBoxButton.YesNo);
                 {
-                    Directory.Delete(_relicDirectory, true);
+                    if (Directory.Exists(_relicDirectory))
+                    {
+                        Directory.Delete(_relicDirectory, true);
+                    }
+
+                    Thread.Sleep(100);
+
+                    Directory.CreateDirectory(_relicDirectory + @"\default");
+
+
+                    filePath = _relicDirectory + @"\Lith.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Lith.json", filePath);
+
+                    filePath = _relicDirectory + @"\Meso.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Meso.json", filePath);
+
+                    filePath = _relicDirectory + @"\Neo.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Neo.json", filePath);
+
+                    filePath = _relicDirectory + @"\Axi.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Axi.json", filePath);
+
+
+
+                    filePath = _relicDirectory + @"\default\Lith.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Lith.json", filePath);
+
+                    filePath = _relicDirectory + @"\default\Meso.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Meso.json", filePath);
+
+                    filePath = _relicDirectory + @"\default\Neo.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Neo.json", filePath);
+
+                    filePath = _relicDirectory + @"\default\Axi.json";
+                    File.Copy(Environment.CurrentDirectory + @"\Relics\Axi.json", filePath);
+                    
+                    Directory.Delete(Environment.CurrentDirectory + @"\Relics\", true);
                 }
-
-                Thread.Sleep(100);
-
-                Directory.CreateDirectory(_relicDirectory + @"\default");
-
-
-                filePath = _relicDirectory + @"\Lith.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Lith.json", filePath);
-
-                filePath = _relicDirectory + @"\Meso.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Meso.json", filePath);
-
-                filePath = _relicDirectory + @"\Neo.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Neo.json", filePath);
-
-                filePath = _relicDirectory + @"\Axi.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Axi.json", filePath);
-
-
-
-                filePath = _relicDirectory + @"\default\Lith.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Lith.json", filePath);
-
-                filePath = _relicDirectory + @"\default\Meso.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Meso.json", filePath);
-
-                filePath = _relicDirectory + @"\default\Neo.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Neo.json", filePath);
-
-                filePath = _relicDirectory + @"\default\Axi.json";
-                File.Copy(Environment.CurrentDirectory + @"\Relics\Axi.json", filePath);
                 
-                Directory.Delete(Environment.CurrentDirectory + @"\Relics\", true);
             }
 
             if (!Directory.Exists(_relicDirectory))

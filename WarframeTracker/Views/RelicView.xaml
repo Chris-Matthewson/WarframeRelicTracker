@@ -37,5 +37,11 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
         <Rectangle Fill="Black" Height="2" Stroke="Black" VerticalAlignment="Bottom"/>
+        <StackPanel Margin="0,0,0,3" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" TextWrapping="Wrap" Text="In Rotation: " VerticalAlignment="Top"/>
+            <Viewbox HorizontalAlignment="Right" Height="15" Margin="0,3,0,0">
+                <CheckBox x:Name="checkBox" IsChecked="{Binding IsInRotation}" Content="" Margin="0" Click="checkBox_Click_1"/>
+            </Viewbox>
+        </StackPanel>
     </Grid>
 </UserControl>

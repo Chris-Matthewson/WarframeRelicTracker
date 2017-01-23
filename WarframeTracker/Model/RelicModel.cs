@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using WarframeTracker.Annotations;
@@ -11,6 +10,22 @@ namespace WarframeTracker.Model
 {
     public class RelicModel : INotifyPropertyChanged
     {
+        private bool _isInRotation;
+
+        public bool IsInRotation
+        {
+            get { return _isInRotation; }
+            set
+            {
+                if (Equals(_isInRotation, value))
+                {
+                    return;
+                }
+                _isInRotation = value;
+                OnPropertyChanged();
+            }
+        }
+
         public string Name => RelicType + " " + RelicSuffix;
 
         private RelicType _relicType = RelicType.Lith;
@@ -80,6 +95,11 @@ namespace WarframeTracker.Model
             }
 
             return false;
+        }
+
+        public void UpdateRelicNeeded()
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("IsNeeded"));
         }
     }
 }

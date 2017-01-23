@@ -18,5 +18,10 @@ namespace WarframeTracker.Views
             var dc = (ComponentModel)s.DataContext;
             SimpleIoc.Default.GetInstance<MainViewModel>().NewComponentObtained(dc);
         }
+
+        private void checkBox_Click_1(object sender, RoutedEventArgs e)
+        {
+            SimpleIoc.Default.GetInstance<MainViewModel>().Save();
+        }
     }
 }

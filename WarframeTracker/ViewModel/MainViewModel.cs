@@ -54,7 +54,9 @@ namespace WarframeTracker.ViewModel
                 propertyChangedEventArgs.PropertyName == "LithFilter" ||
                 propertyChangedEventArgs.PropertyName == "MesoFilter" ||
                 propertyChangedEventArgs.PropertyName == "NeoFilter" ||
-                propertyChangedEventArgs.PropertyName == "AxiFilter")
+                propertyChangedEventArgs.PropertyName == "AxiFilter" ||
+                propertyChangedEventArgs.PropertyName == "IsNeededFilter" ||
+                propertyChangedEventArgs.PropertyName == "RotationFilter")
             {
                 _relicCollectionView.Refresh();
             }
@@ -63,6 +65,7 @@ namespace WarframeTracker.ViewModel
                 propertyChangedEventArgs.PropertyName == "SearchString")
             {
                 _itemsCollectionView.Refresh();
+                _relicCollectionView.Refresh();
             }
         }
 
@@ -138,6 +141,22 @@ namespace WarframeTracker.ViewModel
             }
         }
 
+        private bool _isNeededFilter;
+
+        public bool IsNeededFilter
+        {
+            get { return _isNeededFilter; }
+            set
+            {
+                if (Equals(_isNeededFilter, value))
+                {
+                    return;
+                }
+                _isNeededFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public ICollectionView RelicCollectionView
         {
             get { return _relicCollectionView; }
@@ -190,7 +209,12 @@ namespace WarframeTracker.ViewModel
                     }
                 }
             }
-            
+
+            foreach (var relicModel in _relics)
+            {
+                relicModel.UpdateRelicNeeded();
+            }
+
             Save();
             //RelicCollectionView.Refresh();
             //ItemsCollectionView.Refresh();
@@ -205,12 +229,38 @@ namespace WarframeTracker.ViewModel
                                    "default");
         }
 
+        private bool _rotationFilter;
+
+        public bool RotationFilter
+        {
+            get { return _rotationFilter; }
+            set
+            {
+                if (Equals(_rotationFilter, value))
+                {
+                    return;
+                }
+                _rotationFilter = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private bool RelicFilter(object o)
         {
             var relic = o as RelicModel;
 
             if (relic == null)
                 return false;
+
+            if (IsNeededFilter && relic.IsNeeded)
+            {
+                return false;
+            }
+
+            if (RotationFilter && !relic.IsInRotation)
+            {
+                return false;
+            }
 
             return (((relic.RelicType == RelicType.Lith) && LithFilter) ||
                     ((relic.RelicType == RelicType.Meso) && MesoFilter) ||
@@ -253,6 +303,13 @@ namespace WarframeTracker.ViewModel
             }
             
             items.Sort((x, y) => x.ItemName.CompareTo(y.ItemName));
+
+            foreach (var item in items)
+            {
+                var sorted = item.Components.ToList();
+                sorted.Sort((x, y) => x.ComponentName.CompareTo(y.ComponentName));
+                item.Components = new ObservableCollection<ComponentModel>(sorted);
+            }
 
             return items;
         }
