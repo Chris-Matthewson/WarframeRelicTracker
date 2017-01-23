@@ -160,7 +160,7 @@ namespace WarframeTracker.ViewModel
             if (item == null)
                 return false;
 
-            return true;
+            return item.Search(SearchString);
         }
 
         protected void AddRelic()
@@ -244,13 +244,16 @@ namespace WarframeTracker.ViewModel
                     {
                         foreach (var item in items.Where(x => x.ItemName == component.ItemName))
                         {
-                            item.Components.Add(component);
+                            if (item.Components.All(x => x.ComponentName != component.ComponentName))
+                                item.Components.Add(component);
                         }
                         
                     }
                 }
             }
             
+            items.Sort((x, y) => x.ItemName.CompareTo(y.ItemName));
+
             return items;
         }
     }

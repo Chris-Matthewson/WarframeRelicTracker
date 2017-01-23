@@ -7,7 +7,7 @@
         xmlns:enum="clr-namespace:WarframeTracker.Enums"
         x:Class="WarframeTracker.Dialogs.AddRelicDialog"
         mc:Ignorable="d"
-        Title="AddRelicDialog" Height="300" Width="300"
+        Title="AddRelicDialog" Height="300" Width="300" WindowStartupLocation="CenterOwner"
         >
     <Window.Resources>
         <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type sys:Enum}" x:Key="RelicType">

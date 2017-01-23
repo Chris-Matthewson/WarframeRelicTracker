@@ -60,7 +60,23 @@
             </TabItem>
             <TabItem Header="By Item">
                 <Grid Background="#FFE5E5E5">
-                    <GroupBox x:Name="ItemsGroupBox" Header="Results">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Search" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Margin="0" Grid.Row="1" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="ItemsGroupBox" Header="Results" Grid.Row="1">
                         <ScrollViewer>
                             <ItemsControl ItemsSource="{Binding ItemsCollectionView}" VerticalAlignment="Top">
                                 <ItemsControl.ItemsPanel>
