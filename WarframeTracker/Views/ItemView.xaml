@@ -23,10 +23,12 @@
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{Binding ComponentName}"/>
+                            <TextBlock Text="{Binding ComponentName}" FontWeight="Bold"/>
+                            <!--
                             <TextBlock Text=" ("/>
                             <TextBlock Text="{Binding Relic.Name}"/>
                             <TextBlock Text=")"/>
+                            -->
                         </StackPanel>
                         <Viewbox Width="20" Height="20" Grid.Column="1">
                             <CheckBox IsChecked="{Binding Owned}" Click="CheckBox_Click"/>

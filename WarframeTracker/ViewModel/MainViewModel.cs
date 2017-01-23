@@ -1,8 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
@@ -16,9 +19,9 @@ namespace WarframeTracker.ViewModel
 {
     public class MainViewModel : ViewModelBase
     {
-        private readonly List<ItemModel> _items;
+        private ObservableCollection<ItemModel> _items;
         private readonly IRelicService _relicDataService;
-        private readonly List<RelicModel> _relics;
+        private ObservableCollection<RelicModel> _relics;
         private RelayCommand _addRelicCommand;
         private bool _axiFilter = true;
 
@@ -35,11 +38,11 @@ namespace WarframeTracker.ViewModel
 
             _relicDataService = relicDataService;
 
-            _relics = _relicDataService.GetRelics(RelicType.Lith, "default")
+            _relics = new ObservableCollection<RelicModel>(_relicDataService.GetRelics(RelicType.Lith, "default")
                 .Concat(_relicDataService.GetRelics(RelicType.Meso, "default"))
                 .Concat(_relicDataService.GetRelics(RelicType.Neo, "default"))
-                .Concat(_relicDataService.GetRelics(RelicType.Axi, "default")).ToList();
-            _items = ExtrapolateItems();
+                .Concat(_relicDataService.GetRelics(RelicType.Axi, "default")).ToList());
+            _items = new ObservableCollection<ItemModel>(ExtrapolateItems());
 
             _relicCollectionView = CollectionViewSource.GetDefaultView(_relics);
             _relicCollectionView.Filter = RelicFilter;
@@ -63,6 +66,7 @@ namespace WarframeTracker.ViewModel
                 propertyChangedEventArgs.PropertyName == "SearchString")
             {
                 _itemsCollectionView.Refresh();
+                _relicCollectionView.Refresh();
             }
         }
 
@@ -150,6 +154,40 @@ namespace WarframeTracker.ViewModel
             }
         }
         
+        private RelayCommand _resetToDefaultCommand;
+        public ICommand ResetToDefaultCommand =>  _resetToDefaultCommand ?? ( _resetToDefaultCommand = new RelayCommand(ResetToDefault));
+        protected void ResetToDefault()
+        {
+            if (Directory.Exists(@"C:/ProgramData/WarframeRelicTracker/Default"))
+            {
+                Directory.Delete(@"C:/ProgramData/WarframeRelicTracker/Default", true);
+            }
+
+            Thread.Sleep(100);
+
+            Directory.CreateDirectory(@"C:/ProgramData/WarframeRelicTracker/Default");
+
+            Thread.Sleep(100);
+
+            File.Copy(@"C:/ProgramData/WarframeRelicTracker/Axi.json", @"C:/ProgramData/WarframeRelicTracker/Default/Axi.json");
+            File.Copy(@"C:/ProgramData/WarframeRelicTracker/Neo.json", @"C:/ProgramData/WarframeRelicTracker/Default/Neo.json");
+            File.Copy(@"C:/ProgramData/WarframeRelicTracker/Meso.json", @"C:/ProgramData/WarframeRelicTracker/Default/Meso.json");
+            File.Copy(@"C:/ProgramData/WarframeRelicTracker/Lith.json", @"C:/ProgramData/WarframeRelicTracker/Default/Lith.json");
+
+            _relics = new ObservableCollection<RelicModel>(_relicDataService.GetRelics(RelicType.Lith, "default")
+                .Concat(_relicDataService.GetRelics(RelicType.Meso, "default"))
+                .Concat(_relicDataService.GetRelics(RelicType.Neo, "default"))
+                .Concat(_relicDataService.GetRelics(RelicType.Axi, "default")).ToList());
+            _relicCollectionView = CollectionViewSource.GetDefaultView(_relics);
+
+            _items = new ObservableCollection<ItemModel>(ExtrapolateItems());
+            _itemsCollectionView = CollectionViewSource.GetDefaultView(_items);
+            
+            _relicCollectionView.Refresh();
+            _itemsCollectionView.Refresh();
+
+            RaisePropertyChanged(null);
+        }
 
         public ICommand AddRelicCommand => _addRelicCommand ?? (_addRelicCommand = new RelayCommand(AddRelic));
 
@@ -160,12 +198,15 @@ namespace WarframeTracker.ViewModel
             if (item == null)
                 return false;
 
-            return true;
+            return (item.Search(SearchString));
         }
 
         protected void AddRelic()
         {
-            var relicDialog = new AddRelicDialog();
+            var relicDialog = new AddRelicDialog
+            {
+                Owner = Application.Current.MainWindow
+            };
 
             if (relicDialog.ShowDialog() != true)
                 return;
@@ -244,7 +285,10 @@ namespace WarframeTracker.ViewModel
                     {
                         foreach (var item in items.Where(x => x.ItemName == component.ItemName))
                         {
-                            item.Components.Add(component);
+                            if (item.Components.All(x => x.ComponentName != component.ComponentName))
+                            {
+                                item.Components.Add(component);
+                            }
                         }
                         
                     }

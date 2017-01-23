@@ -41,26 +41,30 @@
                     <GroupBox Header="Results" Grid.Row="1">
                         <Grid>
                             <ScrollViewer>
-                            <ItemsControl ItemsSource="{Binding RelicCollectionView}" VerticalAlignment="Top">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <UniformGrid Columns="2" VerticalAlignment="Top" Height="Auto"/>
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <views:RelicView DataContext="{Binding}" Margin="15"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                                </ScrollViewer>
+                                <ItemsControl ItemsSource="{Binding RelicCollectionView}" VerticalAlignment="Top">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <UniformGrid Columns="2" VerticalAlignment="Top" Height="Auto"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <views:RelicView DataContext="{Binding}" Margin="15"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
             <TabItem Header="By Item">
                 <Grid Background="#FFE5E5E5">
-                    <GroupBox x:Name="ItemsGroupBox" Header="Results">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox x:Name="ItemsGroupBox" Header="Results" Grid.Row="1">
                         <ScrollViewer>
                             <ItemsControl ItemsSource="{Binding ItemsCollectionView}" VerticalAlignment="Top">
                                 <ItemsControl.ItemsPanel>
@@ -76,10 +80,24 @@
                             </ItemsControl>
                         </ScrollViewer>
                     </GroupBox>
+                    <GroupBox Header="Search" Margin="0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Margin="0" Grid.Row="1" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </GroupBox>
                 </Grid>
             </TabItem>
         </TabControl>
-        <Button x:Name="button" Content="Add Relic" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Margin="0,1,1,0" Command="{Binding AddRelicCommand}"/>
+        <Button x:Name="button" Content="Add Relic" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Margin="0,1,1,0" Command="{Binding AddRelicCommand}" Visibility="Hidden"/>
+        <Button x:Name="button_Copy" Content="Reset" HorizontalAlignment="Right" VerticalAlignment="Top" Width="100" Margin="0,1,111,0" Command="{Binding ResetToDefaultCommand}" Visibility="Hidden"/>
 
     </Grid>
 </Window>

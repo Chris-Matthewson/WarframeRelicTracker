@@ -61,7 +61,6 @@ namespace WarframeTracker.Model
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            Debug.WriteLine("Prop changed in RelicModel: " + propertyName);
         }
 
         public bool Search(string searchString)
@@ -73,7 +72,8 @@ namespace WarframeTracker.Model
                 return true;
             }
             else if (Components.Any(relicModelComponent => relicModelComponent.ItemName.ToLower().Contains(searchString.ToLower()) ||
-                                                           relicModelComponent.ComponentName.ToLower().Contains(searchString.ToLower())))
+                                                           relicModelComponent.ComponentName.ToLower().Contains(searchString.ToLower()) ||
+                                                           (relicModelComponent.ItemName.ToLower() + " " + relicModelComponent.ComponentName.ToLower()).Contains(searchString.ToLower())))
             {
                 return true;
             }

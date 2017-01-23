@@ -42,7 +42,21 @@ namespace WarframeTracker.Model
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-            Debug.WriteLine("Prop changed in ItemModel: " + propertyName);
+        }
+
+        public bool Search(string searchString)
+        {
+            if (string.IsNullOrWhiteSpace(searchString))
+            {
+                return true;
+            }
+            else if (Components.Any(relicModelComponent => relicModelComponent.ItemName.ToLower().Contains(searchString.ToLower()) ||
+                                                           relicModelComponent.ComponentName.ToLower().Contains(searchString.ToLower())))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

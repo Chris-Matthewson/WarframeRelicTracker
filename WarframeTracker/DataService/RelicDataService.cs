@@ -20,6 +20,7 @@ namespace WarframeTracker.DataService
                          JsonConvert.DeserializeObject<List<RelicModel>>(File.ReadAllText(filePath)) : 
                          new List<RelicModel>();
 
+
             return relics;
         }
 
