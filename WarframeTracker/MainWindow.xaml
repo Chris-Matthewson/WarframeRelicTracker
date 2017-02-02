@@ -13,7 +13,7 @@
         DataContext="{Binding Main, Source={StaticResource Locator}}">
     <Grid x:Name="LayoutRoot">
         <TabControl x:Name="MainTabControl">
-            <TabItem Header="By Relic">
+            <TabItem Header="By Relic" Width="60">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -42,25 +42,29 @@
                     </GroupBox>
                     <GroupBox Header="Results" Grid.Row="1">
                         <Grid>
-                            <ScrollViewer>
-                            <ItemsControl ItemsSource="{Binding RelicCollectionView}" VerticalAlignment="Top">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                            <WrapPanel ItemWidth="250" VerticalAlignment="Top" Height="Auto" HorizontalAlignment="Center"/>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ScrollViewer Grid.Row="1">
+                                <ItemsControl ItemsSource="{Binding RelicCollectionView}" VerticalAlignment="Top">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel ItemWidth="240" VerticalAlignment="Top" Height="Auto" HorizontalAlignment="Center"/>
                                         </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <views:RelicView DataContext="{Binding}" Margin="15"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                                </ScrollViewer>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <views:RelicView DataContext="{Binding}" Margin="15"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
                         </Grid>
                     </GroupBox>
                 </Grid>
             </TabItem>
-            <TabItem Header="By Item">
+            <TabItem Header="By Item" Width="60">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -89,6 +93,42 @@
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <views:ItemView DataContext="{Binding}" Margin="15"/>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="For Sale" Width="60">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <GroupBox Header="Search" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBox Margin="0" Grid.Row="1" Grid.Column="0" Text="{Binding SearchString, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox x:Name="SellItemsGroupBox" Header="Results" Grid.Row="1">
+                        <ScrollViewer>
+                            <ItemsControl ItemsSource="{Binding SellItemsCollectionView}" VerticalAlignment="Top">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <UniformGrid Columns="2" VerticalAlignment="Top" Height="Auto"/>
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <views:SellItemView DataContext="{Binding}" Margin="15"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>

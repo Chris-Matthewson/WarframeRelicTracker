@@ -45,9 +45,29 @@ namespace WarframeTracker.Design
             };
         }
 
-        public void Save(List<RelicModel> lith, List<RelicModel> meso, List<RelicModel> neo, List<RelicModel> axi, string profileName)
+        public List<SellItemModel> GetSellItems(string profileName)
         {
-            
+            return new List<SellItemModel>
+            {
+                new SellItemModel
+                {
+                    Components = new ObservableCollection<SellComponentModel>
+                    {
+                        new SellComponentModel
+                        {
+                            IsOwned = true,
+                            ItemCount = "99",
+                            ItemPart = "String",
+                            SellPrice = "999"
+                        }
+                    },
+                    ItemName = "Paris Prime"
+                }
+            };
+        }
+
+        public void Save(List<RelicModel> lith, List<RelicModel> meso, List<RelicModel> neo, List<RelicModel> axi, List<SellItemModel> sellItems, string profileName)
+        {
         }
     }
 }

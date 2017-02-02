@@ -23,7 +23,20 @@ namespace WarframeTracker.DataService
             return relics;
         }
 
-        public void Save(List<RelicModel> lith, List<RelicModel> meso, List<RelicModel> neo, List<RelicModel> axi, string profileName)
+        public List<SellItemModel> GetSellItems(string profileName)
+        {
+            //File.WriteAllText(@"C:\ProgramData\WarframeRelicTracker\default\sellItems.json", JsonConvert.SerializeObject(sellItems, Formatting.Indented));
+            var filePath = _relicDirectory + profileName + @"\sellItems.json";
+            Debug.WriteLine("Checking for file: " + filePath);
+
+            var sellItems = File.Exists(filePath) ?
+                            JsonConvert.DeserializeObject<List<SellItemModel>>(File.ReadAllText(filePath)) :
+                            new List<SellItemModel>();
+
+            return sellItems;
+        }
+
+        public void Save(List<RelicModel> lith, List<RelicModel> meso, List<RelicModel> neo, List<RelicModel> axi, List<SellItemModel> sellItems, string profileName)
         {
             string filePath;
 
@@ -42,6 +55,10 @@ namespace WarframeTracker.DataService
             filePath = _relicDirectory + profileName + @"\Axi.json";
             Debug.WriteLine("Saving: " + filePath);
             File.WriteAllText(filePath, JsonConvert.SerializeObject(axi, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All }));
+
+            filePath = _relicDirectory + profileName + @"\sellItems.json";
+            Debug.WriteLine("Saving: " + filePath);
+            File.WriteAllText(filePath, JsonConvert.SerializeObject(sellItems, Formatting.Indented, new JsonSerializerSettings { PreserveReferencesHandling = PreserveReferencesHandling.All }));
         }
     }
 }

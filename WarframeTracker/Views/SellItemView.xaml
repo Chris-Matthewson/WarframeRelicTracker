@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="WarframeTracker.Views.SellItemView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DataContext="{Binding Main.SellItemsCollectionView.CurrentItem, Source={StaticResource Locator}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text ="{Binding ItemName}"  FontWeight="Bold" FontSize="16"/>
+        </StackPanel>
+        <ItemsControl Grid.Row="1" ItemsSource="{Binding Components}" Margin="0,10,0,0">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding ItemPart}" FontWeight="Bold" Margin="0"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                            <Separator Width="10" Visibility="Hidden"/>
+                            <Separator Width="10" Visibility="Hidden"/>
+                            <TextBlock Text="Quantity:  "/>
+                            <Button Width="20" Content="-"  Command="{Binding DecrementCountCommand}"/>
+                            <TextBox Text="{Binding ItemCount, UpdateSourceTrigger=PropertyChanged}" Width="25" TextChanged="TextBox_TextChanged" />
+                            <Button Width="20" Content="+" Command="{Binding IncrementCountCommand}"/>
+                            <Separator Width="10" Visibility="Hidden"/>
+                            <TextBlock Text="Price:  "/>
+                            <TextBox Text="{Binding SellPrice, UpdateSourceTrigger=PropertyChanged}" Width="32" TextChanged="TextBox_TextChanged" />
+                            <Separator Width="10" Visibility="Hidden"/>
+                            <TextBlock Text="Owned: "/>
+                            <Viewbox Width="20" Height="20">
+                                <CheckBox IsChecked="{Binding IsOwned}" Click="CheckBox_Click"/>
+                            </Viewbox>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <Rectangle Fill="Black" Height="2" Stroke="Black" VerticalAlignment="Bottom"/>
+    </Grid>
+    <!--
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Width="175">
+            <TextBlock Text="{Binding ItemName}" FontWeight="Bold"/>
+            <TextBlock Text=" - "/>
+            <TextBlock Text="{Binding ItemPart}"/>
+        </StackPanel>
+        
+        <StackPanel Grid.ColumnSpan="2" Grid.Column="1" Orientation="Horizontal">
+            <Button Width="20">
+                -
+            </Button>
+            <TextBox Text="{Binding ItemCount, UpdateSourceTrigger=PropertyChanged}" Width="25"/>
+            <Button Width="20">
+                +
+            </Button>
+            <Separator Width="10"/>
+            <TextBox Text="{Binding Sellprice, UpdateSourceTrigger=PropertyChanged}" Width="32" />
+            <TextBlock Text="Plat"/>
+        </StackPanel>
+    </Grid>
+    -->
+</UserControl>

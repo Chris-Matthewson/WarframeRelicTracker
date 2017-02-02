@@ -93,6 +93,8 @@
     <Compile Include="Model\ComponentModel.cs" />
     <Compile Include="Model\ItemModel.cs" />
     <Compile Include="Model\RelicModel.cs" />
+    <Compile Include="Model\SellComponentModel.cs" />
+    <Compile Include="Model\SellItemModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Views\ItemView.xaml.cs">
       <DependentUpon>ItemView.xaml</DependentUpon>
@@ -103,6 +105,9 @@
     <Compile Include="ViewModel\AddRelicDialogViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\SellItemView.xaml.cs">
+      <DependentUpon>SellItemView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Dialogs\AddRelicDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -130,6 +135,10 @@
     <Page Include="Skins\MainSkin.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SellItemView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
